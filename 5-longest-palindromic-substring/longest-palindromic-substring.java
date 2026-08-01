@@ -1,29 +1,24 @@
 class Solution {
-    public boolean helper(String s,int i,int j, Boolean[][] dp){
-        if(i>=j) return true;
-        if(dp[i][j]!=null) return dp[i][j];
-        if(s.charAt(i)==s.charAt(j)){
-            dp[i][j] = helper(s,i+1,j-1,dp);
-        }else{
-            dp[i][j] = false;
+    private int helper(String s,int left,int right){
+        while(left>=0 && right<s.length() && s.charAt(left)==s.charAt(right)){
+            left--;
+            right++;
         }
-        return dp[i][j];
+        return right-left-1;
     }
     public String longestPalindrome(String s) {
+        if(s==null || s.length()<1) return "";
         int n = s.length();
-        int start = 0;
-        int maxLen = Integer.MIN_VALUE;
-        Boolean[][] dp = new Boolean[n][n];
-        for(int i = 0;i<n;i++){
-            for(int j = i;j<n;j++){
-                if(helper(s,i,j,dp)){
-                    if(j-i+1>maxLen){
-                        maxLen = j-i+1;
-                        start = i;
-                    }
-                }
+        int start = 0,end=0;
+        for(int i = 0;i<s.length();i++){
+            int len1 = helper(s,i,i);
+            int len2 = helper(s,i,i+1);
+            int maxLen = Math.max(len1,len2);
+            if(maxLen>end-start){
+                start = i - (maxLen-1)/2;
+                end = i + maxLen/2;
             }
         }
-        return s.substring(start,start+maxLen);
+        return s.substring(start,end+1);
     }
 }
