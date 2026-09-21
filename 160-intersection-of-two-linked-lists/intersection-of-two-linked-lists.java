@@ -3,8 +3,8 @@ public class Solution {
         ListNode ptr1 = headA;
         ListNode ptr2 = headB;
         while(ptr1!=ptr2){
-            ptr1 = (ptr1==null) ? headA : ptr1.next;
-            ptr2 = (ptr2==null) ? headB : ptr2.next;
+            ptr1 = (ptr1==null) ? headB : ptr1.next;
+            ptr2 = (ptr2==null) ? headA : ptr2.next;
         }
         if(ptr1==ptr2) return ptr1;
         return null;
