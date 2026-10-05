@@ -1,19 +1,19 @@
 class Solution {
-    public int totalFruit(int[] fruits) {
-        int n = fruits.length;
-        int count = 0;
-        int left = 0;
+    public int totalFruit(int[] nums) {
+        int n = nums.length;
         HashMap<Integer,Integer> map = new HashMap<>();
-        for(int right = 0;right<n;right++){
-            map.put(fruits[right],1+map.getOrDefault(fruits[right],0));
-            while(map.size()>2){
-                map.put(fruits[left],map.get(fruits[left])-1);
-                if(map.get(fruits[left])==0){
-                    map.remove(fruits[left]);
-                }
-                left++;
+        int i = 0;
+        int count = 0;
+        for(int j = 0;j<n;j++){
+        map.put(nums[j],map.getOrDefault(nums[j],0)+1);
+        while(map.size()>2){
+            map.put(nums[i],map.get(nums[i])-1);
+            if(map.get(nums[i])==0){
+                map.remove(nums[i]);
             }
-            count = Math.max(count,right-left+1);
+            i++;
+        }
+        count = Math.max(count,j-i+1);
         }
         return count;
     }
