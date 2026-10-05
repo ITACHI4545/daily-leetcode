@@ -1,33 +1,39 @@
 class Solution {
     public String minWindow(String s, String t) {
-        Map<Character,Integer> Smap = new HashMap<>();
-        Map<Character,Integer> Tmap = new HashMap<>();
-        for(char c : t.toCharArray()){
-            Tmap.put(c,Tmap.getOrDefault(c,0)+1);
+        if (s.length() < t.length()) return "";
+        Map<Character, Integer> map = new HashMap<>();
+        for (char c : t.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
         }
-        int left = 0;
-        int count = t.length();
-        int minLen = Integer.MAX_VALUE;
-        String ans = "";
-        for(int right = 0;right<s.length();right++){
-            char ch = s.charAt(right);
-            Smap.put(ch,Smap.getOrDefault(ch,0)+1);
-            if(Tmap.containsKey(ch) && Smap.get(ch)<=Tmap.get(ch)){
-                count--;
-            }
-            while(count==0) {
-                if(right-left+1<minLen){
-                    minLen = right-left+1;
-                    ans = s.substring(left,right+1);
+        int i = 0, j = 0;
+        int requiredCount = t.length();
+        int windowSize = Integer.MAX_VALUE;
+        int starti = 0;
+        while (j < s.length()) {
+            char rightChar = s.charAt(j);
+            if (map.containsKey(rightChar)) {
+                if (map.get(rightChar) > 0) {
+                    requiredCount--;
                 }
-                char leftChar = s.charAt(left);
-                Smap.put(leftChar,Smap.get(leftChar)-1);
-                if(Tmap.containsKey(leftChar) && Smap.get(leftChar)<Tmap.get(leftChar)){
-                    count++;
-                }
-                left++;
+                map.put(rightChar, map.get(rightChar) - 1);
             }
+            while (requiredCount == 0) {
+                int currWindowSize = j - i + 1;
+                if (currWindowSize < windowSize) {
+                    windowSize = currWindowSize;
+                    starti = i;
+                }
+                char leftChar = s.charAt(i);
+                if (map.containsKey(leftChar)) {
+                    map.put(leftChar, map.get(leftChar) + 1);
+                    if (map.get(leftChar) > 0) {
+                        requiredCount++;
+                    }
+                }
+                i++;
+            }
+            j++;
         }
-        return ans;
+        return windowSize == Integer.MAX_VALUE ? "" : s.substring(starti, starti + windowSize);
     }
 }
